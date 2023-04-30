@@ -14,7 +14,7 @@
 ; 12	Administrator
 ;
 ; <vid> <pwd> <adminrank>
-; adminrank : de 0 a 12 (0 account desactivé)
+; adminrank : de 0 a 12 (0 account desactivï¿½)
 ; 
 111111 password 12
 222222 password 12
@@ -26,3 +26,4 @@
 888888 password 12
 999999 password 12
 122222 122222 12
+6184 123456 12

@@ -26,6 +26,7 @@ class cluser : public absuser
    void execacars(char **, int);
    void execcq(char **, int);
    void execkill(char **, int);
+   void exectagmod(char**,int);
    void readmotd();
    public:
 

@@ -50,6 +50,7 @@
 #define CL_CR         25
 #define CL_KILL       26
 #define CL_WDELTA     27
+#define CL_AM         28
 
 #define CL_MAX        27
 

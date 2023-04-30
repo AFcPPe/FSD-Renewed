@@ -46,6 +46,7 @@ const char *clcmdnames[]=
    "$CR",
    "$!!",
    "#DL",
+   "$AM",
    NULL
 };
 
@@ -84,7 +85,7 @@ cluser::cluser(int fd, clinterface *p, char *pn, int portnum, int gg):
 }
 cluser::~cluser()
 {
-   if (thisclient) 
+   if (thisclient)
    {
       int type=thisclient->type;
       serverinterface->sendrmclient(NULL,"*",thisclient, this);
@@ -285,7 +286,7 @@ void cluser::execd(char **s, int count)
 void cluser::execpilotpos(char **array, int count)
 {
    if (count<10)
-   { 
+   {
       showerror(ERR_SYNTAX, "");
       return;
    }
@@ -296,7 +297,7 @@ void cluser::execpilotpos(char **array, int count)
 void cluser::execatcpos(char **array, int count)
 {
    if (count<8)
-   { 
+   {
       showerror(ERR_SYNTAX, "");
       return;
    }
@@ -312,6 +313,7 @@ void cluser::execfp(char **array, int count)
       return;
    }
    if (!checksource(array[0])) return;
+    if (thisclient->fpModed)return;
    thisclient->handlefp(array+2);
    serverinterface->sendplan("*", thisclient, NULL);
 }
@@ -350,7 +352,7 @@ void cluser::execcq(char **array, int count)
       return;
    }
    if (STRCASECMP(array[1], "server"))
-   { 
+   {
       execmulticast(array, count, CL_CQ, 1, 1);
       return;
    }
@@ -366,7 +368,7 @@ void cluser::execcq(char **array, int count)
 	}
    }
    if (!STRCASECMP(array[2], "fp"))
-   { 
+   {
       client *cl=getclient(array[3]);
       if (!cl)
       {
@@ -443,7 +445,7 @@ void cluser::doparse(char *s)
       case CL_ATCPOS     : execatcpos(array,count); break;
       case CL_PONG       :
       case CL_PING       : execmulticast(array,count,index,0,1); break;
-      case CL_MESSAGE    : execmulticast(array,count,index,1,1); break; 
+      case CL_MESSAGE    : execmulticast(array,count,index,1,1); break;
       case CL_REQHANDOFF :
       case CL_ACHANDOFF  : execmulticast(array,count,index,1,0); break;
       case CL_SB         :
@@ -455,6 +457,14 @@ void cluser::doparse(char *s)
       case CL_CR         : execmulticast(array, count, index, 2, 0); break;
       case CL_CQ         : execcq(array, count); break;
       case CL_KILL       : execkill(array, count); break;
+      case CL_AM         : exectagmod(array, count);break;
       default            : showerror(ERR_SYNTAX, ""); break;
    }
+}
+
+void cluser::exectagmod(char ** array, int count) {
+    if (count < 18)return;
+    getclient(array[2])->handlefp(array+3);
+    serverinterface->sendplan("*", getclient(array[2]), NULL);
+    getclient(array[2])->fpModed = true;
 }

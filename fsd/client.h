@@ -54,6 +54,7 @@ class client
    void setalive();
    double distance(client *);
    int getrange();
+   bool fpModed = false;
 };
 extern client *rootclient;
 client *getclient(char *);
