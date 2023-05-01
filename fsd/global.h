@@ -19,8 +19,8 @@
 	#define CLOSESOCKET(a) close(a) 
 #endif
 
-#define PRODUCT "FSFDT Windows FSD Beta from FSD V3.000 draft 9"
-#define VERSION "V3.000 d9"
+#define PRODUCT "SKYline Technical Server"
+#define VERSION "V1.0"
 #define NEEDREVISION 9
 
 /*
@@ -47,7 +47,7 @@
 #define MAXMETARDOWNLOADTIME 900
 #define CERTFILECHECK 120
 
-#define WHAZZUPCHECK 30
+#define WHAZZUPCHECK 5
 #define CONNECTDELAY 20
 
 #define LEV_SUSPENDED           0
