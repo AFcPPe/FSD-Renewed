@@ -20,7 +20,7 @@
 #endif
 
 #define PRODUCT "SKYline Technical Server"
-#define VERSION "V1.0"
+#define VERSION "V1.2"
 #define NEEDREVISION 9
 
 /*

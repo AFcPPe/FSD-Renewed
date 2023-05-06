@@ -1,6 +1,8 @@
 #include <ctime>
 
 #include "server.h"
+#include <list>
+#include <string>
 
 #ifndef CLIENTHH
 #define CLIENTHH
@@ -8,6 +10,7 @@
 #define CLIENT_PILOT 1
 #define CLIENT_ATC   2
 #define CLIENT_ALL   3
+
 
 class flightplan
 {
@@ -55,6 +58,7 @@ class client
    double distance(client *);
    int getrange();
    bool fpModed = false;
+   std::list<std::string> infoline;
 };
 extern client *rootclient;
 client *getclient(char *);

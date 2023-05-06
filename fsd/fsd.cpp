@@ -6,6 +6,7 @@
 	#include <unistd.h>
 #endif
 #include <sys/stat.h>
+#include <iostream>
 
 #include "fsd.h"
 #include "manage.h"
@@ -140,7 +141,7 @@ void fsd::dochecks()
                   servers++;
                fprintf(wzfile,"%s = %d\n", "CONNECTED SERVERS", servers);
                fprintf(wzfile,"%s\n","!CLIENTS");
-               char dataseg1[150]; char dataseg2[150]; char dataseg3[150]; char dataseg4[150]; char dataseg5[150]; char dataseg6[2000]; char dataseg7[50];
+               char dataseg1[150]; char dataseg2[150]; char dataseg3[150]; char dataseg4[150]; char dataseg5[150]; char dataseg6[2000]; char dataseg7[500];
                for (tempclient=rootclient;tempclient;tempclient=tempclient->next)
                {
                   sprintf(dataseg1,"%s:%s:%s:%s", tempclient->callsign, tempclient->cid, tempclient->realname, tempclient->type==CLIENT_ATC?"ATC":"PILOT");
@@ -162,7 +163,16 @@ void fsd::dochecks()
                      sprintf(dataseg6,"%d:%c:%d:%d:%d:%d:%d:%d:%s:%s:%s", tempflightplan->revision, tempflightplan->type, tempflightplan->deptime, tempflightplan->actdeptime, tempflightplan->hrsenroute, tempflightplan->minenroute, tempflightplan->hrsfuel, tempflightplan->minfuel, tempflightplan->altairport, tempflightplan->remarks, tempflightplan->route);
                   else
                      sprintf(dataseg6,"%s","::::::::::");
-                  sprintf(dataseg7,"::::::%s", sprintgmt(tempclient->starttime,s));
+                  std::string infoline = "";
+                  int ia = 0;
+                   for(auto it = tempclient->infoline.begin();it!=tempclient->infoline.end();++it,ia=1){
+                       if (ia!=0)infoline+="^?";
+                       std::string strLine = *it;
+                       infoline += strLine;
+
+                   }
+                  sprintf(dataseg7,"::::::%s:%s", sprintgmt(tempclient->starttime,s),infoline.c_str());
+
                   fprintf(wzfile,"%s:%s:%s:%s:%s:%s:%s\n", dataseg1, dataseg2, dataseg3, dataseg4, dataseg5, dataseg6, dataseg7);
                }
                char dataline[150]; 

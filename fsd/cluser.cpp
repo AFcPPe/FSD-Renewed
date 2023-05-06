@@ -5,6 +5,7 @@
 #endif
 #include <cctype>
 #include <cstring>
+#include <iostream>
 
 #include "global.h"
 #include "cluser.h"
@@ -208,6 +209,7 @@ void cluser::execaa(char **s, int count)
       -1);
    serverinterface->sendaddclient("*",thisclient, NULL, this, 0);
    readmotd();
+    clientinterface->sendgeneric(thisclient->callsign, thisclient, NULL, NULL, "INFOLINE", "ATIS", CL_CQ);
 }
 void cluser::execap(char **s, int count)
 {
@@ -258,6 +260,7 @@ void cluser::execap(char **s, int count)
       atoi(s[6]));
    serverinterface->sendaddclient("*",thisclient, NULL, this, 0);
    readmotd();
+
 }
 void cluser::execmulticast(char **s, int count, int cmd, int nargs, int multiok)
 {
@@ -270,6 +273,21 @@ void cluser::execmulticast(char **s, int count, int cmd, int nargs, int multiok)
    char *from, *to, data[1000]="";
    catcommand(s+2, count-2, data);
    from=s[0], to=s[1];
+   if(!strcmp(to,"INFOLINE")){
+       std::string infoData = data;
+       if(infoData.find("afv")!=std::string::npos)return;
+       if(infoData.find("z")!=std::string::npos&& strlen(data)<=2)return;
+       if(infoData.find("z")!=std::string::npos&& strlen(data)==5)
+            infoData = "Expect log off time: "+infoData;
+       if(infoData.find("www.vatprc.net")!=std::string::npos){
+//           infoData.find("www.vatprc.net")
+            int pos = infoData.find("www.vatprc.net");
+            infoData.erase(pos,14);
+            infoData.insert(pos,"https://efb.skylineflyleague.cn/");
+       }
+       thisclient->infoline.emplace_back(infoData);
+       return;
+   }
    if (!checksource(from)) return;
    serverinterface->sendmulticast(thisclient, to, data, cmd, multiok, this);
 }
@@ -353,6 +371,30 @@ void cluser::execcq(char **array, int count)
    }
    if (STRCASECMP(array[1], "server"))
    {
+       if (!STRCASECMP(strupr(array[2]), "ATIS")&&thisclient->type==CLIENT_PILOT)
+       {
+           client *cl=getclient(array[1]);
+           if (cl)
+           {
+               clientinterface->sendgeneric(thisclient->callsign, thisclient, NULL, NULL, array[1],
+                                            "ATIS:V:", CL_CR);
+               for(auto it = cl->infoline.begin();it!=cl->infoline.end();++it){
+                   std::string strLine = *it;
+                   char retdata[1000];
+                   sprintf(retdata,"ATIS:T:%s",strLine.c_str());
+                   clientinterface->sendgeneric(thisclient->callsign, thisclient, NULL, NULL, array[1],
+                                                retdata, CL_CR);
+               }
+               clientinterface->sendgeneric(thisclient->callsign, thisclient, NULL, NULL, array[1],
+                                            "ATIS:Z:z", CL_CR);
+               clientinterface->sendgeneric(thisclient->callsign, thisclient, NULL, NULL, array[1],
+                                            "ATIS:E:6", CL_CR);
+               return;
+           }
+           clientinterface->sendgeneric(thisclient->callsign, thisclient, NULL, NULL, array[1],
+                                        "", CL_CR);
+           return;
+       }
       execmulticast(array, count, CL_CQ, 1, 1);
       return;
    }
