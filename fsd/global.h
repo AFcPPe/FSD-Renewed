@@ -2,6 +2,7 @@
 
 #include "manage.h"
 #include "fsdpaths.h"
+#include "httplib.h"
 
 #ifndef GLOBALHH
 #define GLOBALHH
@@ -10,7 +11,7 @@
 	#define STRCASECMP(a,b)	_stricmp(a,b)
 	#define WRITESOCK(a,b,c) send(a,b,c,0) 
 	#define READSOCK(a,b,c) recv(a,b,c,0) 
-	#define socklen_t	int
+//	#define socklen_t	int
 	#define CLOSESOCKET(a) closesocket(a) 
 #else
 	#define STRCASECMP(a,b)	strcasecmp(a,b)
