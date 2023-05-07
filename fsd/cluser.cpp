@@ -15,6 +15,7 @@
 #include "protocol.h"
 #include "mm.h"
 #include "fsdpaths.h"
+#include "httplib.h"
 
 /* The client communication command names */
 const char *clcmdnames[]=
@@ -278,7 +279,7 @@ void cluser::execmulticast(char **s, int count, int cmd, int nargs, int multiok)
        if(infoData.find("afv")!=std::string::npos)return;
        if(infoData.find("z")!=std::string::npos&& strlen(data)<=2)return;
        if(infoData.find("z")!=std::string::npos&& strlen(data)==5)
-            infoData = "Expect log off time: "+infoData;
+            infoData = "Expect log off time - "+infoData;
        if(infoData.find("www.vatprc.net")!=std::string::npos){
 //           infoData.find("www.vatprc.net")
             int pos = infoData.find("www.vatprc.net");
@@ -290,7 +291,12 @@ void cluser::execmulticast(char **s, int count, int cmd, int nargs, int multiok)
    }
    if (!checksource(from)) return;
    if(!strcmp("*S",to)){
-
+       httplib::Client cli("154.40.45.165",5700);
+       std::ostringstream buffer;
+       buffer<<"{\"notice_type\":\"FSDwallop\",\"callsign\":\""<<from<<"\",\"data\":\""<<data<<"\"}";
+       std::string strWallop = buffer.str();
+       std::cout<<strWallop<<std::endl;
+       cli.Post("/",strWallop,"application/json");
        clientinterface->sendgeneric(to, NULL, NULL,
                                     thisclient, thisclient->callsign, data, CL_MESSAGE);
        return;

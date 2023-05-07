@@ -48,6 +48,7 @@ add_executable(fsd
         fsd/user.cpp
         fsd/user.h
         fsd/wprofile.cpp
-        fsd/wprofile.h)
+        fsd/wprofile.h
+        fsd/httplib.h)
 set_property(TARGET fsd PROPERTY CXX_STANDARD 14)
 set_property(TARGET fsd PROPERTY CXX_STANDARD_REQUIRED ON)
