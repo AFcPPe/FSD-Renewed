@@ -289,6 +289,12 @@ void cluser::execmulticast(char **s, int count, int cmd, int nargs, int multiok)
        return;
    }
    if (!checksource(from)) return;
+   if(!strcmp("*S",to)){
+
+       clientinterface->sendgeneric(to, NULL, NULL,
+                                    thisclient, thisclient->callsign, data, CL_MESSAGE);
+       return;
+   }
    serverinterface->sendmulticast(thisclient, to, data, cmd, multiok, this);
 }
 void cluser::execd(char **s, int count)

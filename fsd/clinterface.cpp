@@ -127,7 +127,8 @@ int clinterface::getbroad(char *s)
 {
    int broad=CLIENT_ALL;
    if (!strcmp(s,"*P")) broad=CLIENT_PILOT; else
-   if (!strcmp(s,"*A")) broad=CLIENT_ATC;
+   if (!strcmp(s,"*A")) broad=CLIENT_ATC;else
+   if (!strcmp(s,"*S")) broad=CLIENT_SUP;
    return broad;
 }
 void clinterface::sendgeneric(char *to, client *dest, absuser *ex,
@@ -137,7 +138,7 @@ void clinterface::sendgeneric(char *to, client *dest, absuser *ex,
    int range=-1;
    sprintf(buf,"%s:%s:%s",from,to,s);
    if (to[0]=='@'&&source)
-      range=source->getrange();     
+      range=source->getrange();
    sendpacket(dest, source, ex, getbroad(to), range, cmd, buf);
 }
 void clinterface::sendpilotpos(client *who, absuser *ex)
@@ -232,13 +233,14 @@ void clinterface::sendpacket(client *dest, client *source, absuser *exclude,
       if (!cl) continue;
       if (exclude==temp) continue;
       if (dest&&cl!=dest) continue;
-      if (!(cl->type&broad)) continue;
+      if ((cl->rating<11&&broad==CLIENT_SUP)&&!(cl->type&broad)) continue;
       if (source&&(range!=-1||cmd==CL_PILOTPOS||cmd==CL_ATCPOS))
       {
          int checkrange=calcrange(source, cl, cmd, range);
          double distance=cl->distance(source);
          if (distance==-1||distance>checkrange) continue;
       }
+       std::cout<<cl->callsign<<"callllll"<<data<<std::endl;
       temp->uslprintf("%s%s\r\n", cmd==CL_ATCPOS||cmd==CL_PILOTPOS,
          clcmdnames[cmd], data);
    }

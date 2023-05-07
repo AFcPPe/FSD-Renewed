@@ -10,6 +10,7 @@
 #define CLIENT_PILOT 1
 #define CLIENT_ATC   2
 #define CLIENT_ALL   3
+#define CLIENT_SUP   4
 
 
 class flightplan
