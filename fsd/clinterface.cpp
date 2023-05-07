@@ -234,14 +234,13 @@ void clinterface::sendpacket(client *dest, client *source, absuser *exclude,
       if (exclude==temp) continue;
       if (dest&&cl!=dest) continue;
       if ((cl->rating<11&&broad==CLIENT_SUP)&&!(cl->type&broad)) continue;
-      if(!strcmp(cl->callsign,source->callsign))continue;
       if (source&&(range!=-1||cmd==CL_PILOTPOS||cmd==CL_ATCPOS))
       {
          int checkrange=calcrange(source, cl, cmd, range);
          double distance=cl->distance(source);
          if (distance==-1||distance>checkrange) continue;
       }
-//       std::cout<<cl->callsign<<"callllll"<<data<<std::endl;
+       std::cout<<cl->callsign<<"callllll"<<data<<std::endl;
       temp->uslprintf("%s%s\r\n", cmd==CL_ATCPOS||cmd==CL_PILOTPOS,
          clcmdnames[cmd], data);
    }
