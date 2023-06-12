@@ -210,7 +210,7 @@ void cluser::execaa(char **s, int count)
       -1);
    serverinterface->sendaddclient("*",thisclient, NULL, this, 0);
    readmotd();
-    clientinterface->sendgeneric(thisclient->callsign, thisclient, NULL, NULL, "INFOLINE", "ATIS", CL_CQ);
+   clientinterface->sendgeneric(thisclient->callsign, thisclient, NULL, NULL, "INFOLINE", "ATIS", CL_CQ);
 }
 void cluser::execap(char **s, int count)
 {
@@ -277,15 +277,17 @@ void cluser::execmulticast(char **s, int count, int cmd, int nargs, int multiok)
    if(!strcmp(to,"INFOLINE")){
        std::string infoData = data;
        if(infoData.find("afv")!=std::string::npos)return;
-       if(infoData.find("z")!=std::string::npos&& strlen(data)<=2)return;
-       if(infoData.find("z")!=std::string::npos&& strlen(data)==5)
-            infoData = "Expect log off time - "+infoData;
-       if(infoData.find("www.vatprc.net")!=std::string::npos){
-//           infoData.find("www.vatprc.net")
-            int pos = infoData.find("www.vatprc.net");
-            infoData.erase(pos,14);
-            infoData.insert(pos,"https://efb.skylineflyleague.cn/");
+       if(infoData.find("z")!=std::string::npos){
+           if(strlen(data)<=2){
+               return;
+           }
+           if(strlen(data)==5)infoData = "Expect log off time - "+infoData;
        }
+//       if(infoData.find("www.vatprc.net")!=std::string::npos){
+//            int pos = infoData.find("www.vatprc.net");
+//            infoData.erase(pos,14);
+//            infoData.insert(pos,"https://efb.skylineflyleague.cn/");
+//       }
        thisclient->infoline.emplace_back(infoData);
        return;
    }
