@@ -240,7 +240,6 @@ void clinterface::sendpacket(client *dest, client *source, absuser *exclude,
          double distance=cl->distance(source);
          if (distance==-1||distance>checkrange) continue;
       }
-       std::cout<<cl->callsign<<"callllll"<<data<<std::endl;
       temp->uslprintf("%s%s\r\n", cmd==CL_ATCPOS||cmd==CL_PILOTPOS,
          clcmdnames[cmd], data);
    }

@@ -297,7 +297,6 @@ void cluser::execmulticast(char **s, int count, int cmd, int nargs, int multiok)
        std::ostringstream buffer;
        buffer<<"{\"notice_type\":\"FSDwallop\",\"callsign\":\""<<from<<"\",\"data\":\""<<data<<"\"}";
        std::string strWallop = buffer.str();
-       std::cout<<strWallop<<std::endl;
        cli.Post("/",strWallop,"application/json");
        clientinterface->sendgeneric(to, NULL, NULL,
                                     thisclient, thisclient->callsign, data, CL_MESSAGE);
