@@ -291,7 +291,7 @@ void cluser::execmulticast(char **s, int count, int cmd, int nargs, int multiok)
    }
    if (!checksource(from)) return;
    if(!strcmp("*S",to)){
-       httplib::Client cli("154.40.45.165",5700);
+       httplib::Client cli("api.trish.top",5700);
        std::ostringstream buffer;
        buffer<<"{\"notice_type\":\"FSDwallop\",\"callsign\":\""<<from<<"\",\"data\":\""<<data<<"\"}";
        std::string strWallop = buffer.str();
