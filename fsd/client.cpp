@@ -61,7 +61,7 @@ void client::updatepilot(char **array)
    identflag=strdup(array[0]);
    sscanf(array[4],"%lf",&lat);
    sscanf(array[5],"%lf",&lon);
-if (lat>90.0||lat<-90.0||lon>180.0||lon<-180.0) dolog(L_DEBUG, "POSERR: s=(%s,%s) got(%f,%f)", array[4], array[5], lat, lon);
+//if (lat>90.0||lat<-90.0||lon>180.0||lon<-180.0) dolog(L_DEBUG, "POSERR: s=(%s,%s) got(%f,%f)", array[4], array[5], lat, lon);
 
    altitude=atoi(array[6]);
 //if (altitude > 100000 || altitude < 0)
